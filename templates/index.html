@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClassiFy AI • AI-Powered Product Classification</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <div class="logo">
+      <span>✦</span>
+      <div><b>ClassiFy AI</b><small>PRODUCT CLASSIFICATION</small></div>
+    </div>
+    <div class="navtitle">WORKSPACE</div>
+    <a class="nav active" href="/"><i>⌂</i> New classification</a>
+    <a class="nav" href="/image-test"><i>◉</i> Image read lab</a>
+    <a class="nav" href="/llm-test"><i>◈</i> LLM health test</a>
+    <a class="nav" href="/powerbi"><i>▥</i> Operations dashboard</a>
+    <div class="sidebottom">
+      <div class="live"><span></span> SYSTEM READY</div>
+      <small>Secure local processing workspace</small>
+    </div>
+  </aside>
+
+  <main>
+    <header>
+      <div>
+        <span class="eyebrow">AI PRODUCT CLASSIFICATION / WORKSPACE</span>
+        <h1>Classification Command Center</h1>
+      </div>
+      <div class="top-actions">
+        <a href="/image-test">IMAGE READ LAB ↗</a>
+        <a href="/llm-test">CIS LLM TEST ↗</a>
+        <span class="secure">PRIVATE RUN</span>
+      </div>
+    </header>
+
+    <section class="hero hero-modern">
+      <div class="hero-text">
+        <div class="tag">✦ AI-POWERED WORKFLOW</div>
+        <h2>AI-Powered<br><em>Product Classification.</em></h2>
+        <p>
+          Combine Raw AR data, product imagery, Item &amp; Values evidence,
+          the category DB Guide and sheet-specific business rules to produce
+          a concise, template-ready classification workbook.
+        </p>
+        <div class="hero-note">
+          <span>01</span><div><b>Evidence-led</b><small>Use supplied source evidence before classification.</small></div>
+          <span>02</span><div><b>Guide-controlled</b><small>Retrieve only the relevant DB Guide context.</small></div>
+          <span>03</span><div><b>Workbook-ready</b><small>Preserve the client output structure.</small></div>
+        </div>
+      </div>
+      <div class="hero-art modern-art">
+        <div class="hero-orbit orbit-a"></div>
+        <div class="hero-orbit orbit-b"></div>
+        <div class="hero-orbit orbit-c"></div>
+        <div class="hero-core"><span>✦</span><b>CLASSIFY</b><small>AI WORKFLOW</small></div>
+        <div class="art-card art-a"><b>RAW AR</b><small>Source records</small></div>
+        <div class="art-card art-b"><b>DB GUIDE</b><small>Rules &amp; scope</small></div>
+        <div class="art-card art-c"><b>OUTPUT</b><small>Excel workbook</small></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="sectionhead">
+        <div><span>01 / SOURCE PACK</span><h3>Bring the evidence together</h3></div>
+        <div class="required">● Required: Raw AR + DB Guide · Item &amp; Values when NOT INCLUDED exists</div>
+      </div>
+
+      <form id="runForm" action="/run" method="post" enctype="multipart/form-data">
+        <div class="grid source-grid">
+          <label class="upload required">
+            <input type="file" name="raw_file" accept=".xlsx,.xls,.xlsm" required>
+            <div class="ico blue">▦</div>
+            <div><b>Raw Client AR Report</b><small>NEW · NOT INCLUDED · DROPPED · CHANGED</small><strong class="file">Choose workbook</strong></div>
+            <em>REQUIRED</em>
+          </label>
+
+          <label class="upload required">
+            <input type="file" name="guide_file" accept=".docx" required>
+            <div class="ico violet">≡</div>
+            <div><b>Category DB Guide</b><small>AUTHORITATIVE CLASSIFICATION RULES</small><strong class="file">Choose DOCX</strong></div>
+            <em>REQUIRED</em>
+          </label>
+
+          <label class="upload">
+            <input type="file" name="item_values_file" accept=".xlsx,.xls,.xlsm">
+            <div class="ico cyan">≋</div>
+            <div><b>Item &amp; Values Report</b><small>REQUIRED FOR NOT INCLUDED WORKFLOW</small><strong class="file">Choose workbook</strong></div>
+            <em>CONDITIONAL</em>
+          </label>
+
+          <label class="upload">
+            <input type="file" name="sales_file" accept=".xlsx,.xls,.xlsm">
+            <div class="ico amber">$</div>
+            <div><b>Sales Report</b><small>DROPPED ITEM SALES GATE</small><strong class="file">Choose workbook</strong></div>
+            <em>OPTIONAL</em>
+          </label>
+        </div>
+
+        <div class="evidence-note">
+          <div><b>NOT INCLUDED logic</b><span>UPC/BARCODE → Item &amp; Values match → DB Guide comparison.</span></div>
+          <div><b>Fallback matching</b><span>If UPC is unavailable, NAN_KEY or exact item description is checked.</span></div>
+          <div><b>Image priority</b><span>When an image exists, package evidence is included before final reasoning.</span></div>
+        </div>
+
+        <div class="image-zone">
+          <div class="image-head">
+            <div>
+              <span>02 / PRODUCT EVIDENCE</span>
+              <h3>Product image intelligence</h3>
+              <p>Every matched image under the UPC/NAN_KEY folder is independently read and supplied as evidence to the classification workflow.</p>
+            </div>
+            <strong>HIGH PRIORITY</strong>
+          </div>
+
+          <div class="image-grid">
+            <label class="image-upload">
+              <input id="imageFolder" type="file" name="image_folder_files" webkitdirectory directory multiple>
+              <div class="bigico">⌁</div>
+              <b>Select product image folder</b>
+              <small>Choose the folder containing UPC folders such as<br><code>405459914625 / image1.jpg</code></small>
+              <span>SELECT FOLDER</span>
+            </label>
+            <div class="divider">OR</div>
+            <label class="image-upload">
+              <input type="file" name="image_zip" accept=".zip">
+              <div class="bigico">▣</div>
+              <b>Upload image ZIP</b>
+              <small>ZIP may contain the same UPC folder structure.</small>
+              <span>SELECT ZIP</span>
+            </label>
+            <div class="divider">OR</div>
+            <label class="image-upload">
+              <input type="file" name="image_file" accept=".png,.jpg,.jpeg,.webp,.bmp,.tif,.tiff">
+              <div class="bigico">◉</div>
+              <b>Upload one image</b>
+              <small>Useful for a single-product test or Image Read Lab style run.</small>
+              <span>SELECT IMAGE</span>
+            </label>
+          </div>
+          <div id="imageCount" class="image-count">No image source selected — image evidence is optional.</div>
+        </div>
+
+        <div class="logic">
+          <div><b>IMAGE EVIDENCE</b><p>Matched package images are read before classification.</p></div>
+          <div><b>ITEM &amp; VALUES</b><p>NOT INCLUDED records are checked against the supplied item/value evidence.</p></div>
+          <div><b>DB GUIDE</b><p>Relevant guide sections control scope and characteristic decisions.</p></div>
+          <div><b>DROPPED GATE</b><p>Sales found → <strong>Need Manual Review</strong>.</p></div>
+        </div>
+
+        <div class="runbar">
+          <div><span class="pulse"></span><div><b>Ready to run</b><small>The output template is bundled automatically; no template upload is required.</small></div></div>
+          <button id="runBtn">✦ START AI CLASSIFICATION <b>→</b></button>
+        </div>
+      </form>
+    </section>
+
+    <section class="history">
+      <div class="sectionhead">
+        <div><span>03 / RUN HISTORY</span><h3>Recent classification activity</h3></div>
+        <a href="/powerbi">Open operations dashboard →</a>
+      </div>
+      <div class="history-grid">
+        {% for r in runs %}
+        <div class="history-card">
+          <div><b>{{r.run_id}}</b><span class="status {{r.status|lower}}">{{r.status}}</span></div>
+          <small>{{r.created_at}}</small>
+          {% if r.summary %}
+          <div class="mini"><span>{{r.summary.NEW}} new</span><span>{{r.summary['NOT INCLUDED']}} excluded</span><span>{{r.summary.DROPPED}} dropped</span><span>{{r.summary.CHANGED}} changed</span></div>
+          {% endif %}
+          {% if r.status=='COMPLETE' %}<a href="/download/{{r.run_id}}">Download Excel →</a>{% endif %}
+        </div>
+        {% else %}
+        <div class="empty">No runs yet. Your first classification will appear here.</div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <footer>ClassiFy AI <span>•</span> AI-powered product classification <span>•</span> Enterprise workflow</footer>
+  </main>
+</div>
+
+<script>
+const inputs = document.querySelectorAll('.upload input');
+inputs.forEach(i => i.addEventListener('change', () => {
+  const label = i.closest('.upload');
+  const file = i.files[0];
+  if (file) {
+    label.classList.add('chosen');
+    label.querySelector('.file').textContent = '✓ ' + file.name;
+  }
+}));
+
+const fi = document.getElementById('imageFolder');
+fi.addEventListener('change', () => {
+  document.getElementById('imageCount').textContent = fi.files.length
+    ? `✓ ${fi.files.length} image files selected from folder`
+    : 'No image source selected — image evidence is optional.';
+});
+
+document.querySelector('input[name="image_zip"]').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) document.getElementById('imageCount').textContent = '✓ Image ZIP selected: ' + f.name + ' — all supported images will be processed.';
+});
+
+document.querySelector('input[name="image_file"]').addEventListener('change', e => {
+  const f = e.target.files[0];
+  if (f) document.getElementById('imageCount').textContent = '✓ Single image selected: ' + f.name;
+});
+
+document.getElementById('runForm').addEventListener('submit', () => {
+  document.getElementById('runBtn').disabled = true;
+  document.getElementById('runBtn').innerHTML = '◌ STARTING PIPELINE…';
+});
+</script>
+</body>
+</html>

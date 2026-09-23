@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Image Intelligence Lab • ClassiFy AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<body class="labbody">
+<div class="lab-shell">
+  <aside class="lab-side">
+    <a href="/" class="lab-brand"><span>✦</span><div><b>ClassiFy AI</b><small>PRODUCT INTELLIGENCE</small></div></a>
+    <div class="lab-nav-title">VISION WORKSPACE</div>
+    <a href="/" class="lab-nav"><i>⌂</i> Command Center</a>
+    <a href="/image-test" class="lab-nav active"><i>◈</i> Image Intelligence</a>
+    <a href="/llm-test" class="lab-nav"><i>◉</i> CIS LLM Health</a>
+    <a href="/powerbi" class="lab-nav"><i>▦</i> Operations</a>
+    <div class="lab-side-footer"><span class="pulse"></span><b>VISION STACK READY</b><small>Inspect one real package before a production run.</small></div>
+  </aside>
+
+  <main class="lab-main">
+    <header class="lab-topbar">
+      <div><div class="crumb">VISION WORKSPACE / DIAGNOSTICS</div><h1>Image Intelligence Lab</h1><p>Inspect exactly how the production engine reads a product package — preprocessing, OCR engines, CIS Vision and combined evidence.</p></div>
+      <a class="lab-back" href="/">← Back to Command Center</a>
+    </header>
+
+    <section class="lab-command">
+      <div class="command-copy"><span class="status-chip"><span></span> IMAGE-FIRST VALIDATION</span><h2>Read the package<br><em>before you classify it.</em></h2><p>Use one real product image to validate the same vision stack used by the classification pipeline. A local OCR miss never means the image is empty — CIS Vision is evaluated separately.</p>
+        <div class="mini-flow"><span>IMAGE</span><b>→</b><span>PREPROCESS</span><b>→</b><span>OCR</span><b>→</b><span>CIS VISION</span><b>→</b><span>EVIDENCE</span></div>
+      </div>
+      <form id="testForm" class="reader-form">
+        <label class="dropzone" id="dropzone"><input id="image" type="file" name="image" accept="image/*" required><div class="drop-icon">↥</div><strong id="dropTitle">Drop one product image</strong><span>JPG · PNG · WEBP · TIFF · BMP</span><b id="fileName">Choose an image to begin</b></label>
+        <button class="read-btn" id="readBtn"><span>✦</span> RUN IMAGE READ</button>
+        <div class="privacy-note">Processed locally for the diagnostic request. The same image is then evaluated by the configured CIS Vision service.</div>
+      </form>
+    </section>
+
+    <section id="result" class="hidden">
+      <div class="result-banner"><div><span class="result-kicker">IMAGE READ COMPLETE</span><h2 id="resultTitle">Evidence collected from the package</h2></div><button id="newTest" class="ghost-btn">＋ Test another image</button></div>
+      <div class="metric-grid">
+        <article class="metric"><small>LOCAL OCR</small><strong id="ocrState">—</strong><span id="ocrSub">—</span></article>
+        <article class="metric"><small>CIS VISION</small><strong id="visionState">—</strong><span id="visionSub">—</span></article>
+        <article class="metric"><small>ENGINES</small><strong id="engineState">—</strong><span>available for this environment</span></article>
+        <article class="metric"><small>READ TIME</small><strong id="timeState">—</strong><span>local diagnostic request</span></article>
+      </div>
+
+      <div class="evidence-layout">
+        <section class="lab-card visual-card"><div class="card-head"><div><span>01 / VISUAL INSPECTION</span><h3>What the preprocessing stack sees</h3></div><div class="card-tools"><span id="previewCount">0 variants</span></div></div><div id="previews" class="previewgrid pro-previews"></div></section>
+        <section class="lab-card engine-card"><div class="card-head"><div><span>02 / LOCAL OCR</span><h3>Engine-by-engine diagnostics</h3></div><span class="small-note">OCR is supporting evidence</span></div><div id="engineCards" class="engine-list"></div></section>
+      </div>
+
+      <div class="evidence-layout lower-grid">
+        <section class="lab-card vision-card"><div class="card-head"><div><span>03 / CIS VISION</span><h3>Package understanding</h3></div><span id="visionConfidence" class="confidence-pill">—</span></div><div id="visionSummary" class="vision-summary"></div><details class="json-details"><summary>View raw Vision JSON</summary><pre id="visionText">Waiting…</pre></details></section>
+        <section class="lab-card combined-card"><div class="card-head"><div><span>04 / COMBINED EVIDENCE</span><h3>What classification receives</h3></div><button id="copyEvidence" class="copy-btn">Copy evidence</button></div><div id="combinedPanel" class="combined-panel"></div><pre id="combinedText" class="combined-raw">Waiting…</pre></section>
+      </div>
+    </section>
+    <div id="error" class="lab-error hidden"></div>
+  </main>
+</div>
+<script>
+const form=document.getElementById('testForm'), input=document.getElementById('image'), drop=document.getElementById('dropzone'), fileName=document.getElementById('fileName'), title=document.getElementById('dropTitle');
+const result=document.getElementById('result'), errorBox=document.getElementById('error'), readBtn=document.getElementById('readBtn');
+let lastEvidence='';
+function selected(){const f=input.files[0]; if(!f)return; fileName.textContent=f.name; title.textContent='Image ready for inspection'; drop.classList.add('selected');}
+input.onchange=selected;
+['dragenter','dragover'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.add('dragging')}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,ev=>{ev.preventDefault();drop.classList.remove('dragging')}));
+drop.addEventListener('drop',ev=>{if(ev.dataTransfer.files.length){input.files=ev.dataTransfer.files;selected();}});
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function badge(ok){return `<span class="engine-badge ${ok?'available':'unavailable'}"><i></i>${ok?'AVAILABLE':'UNAVAILABLE'}</span>`}
+function visionCards(v){const s=v.structured_evidence||{}; const rows=[['Brand',s.brand],['Product name',s.product_name],['Form',s.form],['Package type',s.package_type],['Claims',(s.claims||[]).join(' • ')],['Ingredients',s.ingredients],['Scent',s.scent],['Size',s.size],['Strength',s.strength],['Target condition',s.target_condition],['Time of day',s.time_of_day],['Barcode / UPC',s.barcode_or_upc]]; return `<div class="vision-grid">${rows.filter(x=>x[1]!==null&&x[1]!==undefined&&String(x[1]).trim()!=='').map(x=>`<div class="vision-item"><small>${esc(x[0])}</small><b>${esc(Array.isArray(x[1])?x[1].join(' • '):x[1])}</b></div>`).join('')}</div><div class="visual-facts"><small>VISUAL EVIDENCE</small>${(v.visual_evidence?.non_text_facts||[]).map(x=>`<span>• ${esc(x)}</span>`).join('')}</div>`}
+function renderPreviews(p){const entries=Object.entries(p||{});document.getElementById('previewCount').textContent=entries.length+' variants';document.getElementById('previews').innerHTML=entries.map(([k,v])=>`<figure class="preview-card"><div class="preview-img"><img src="${v}" alt="${esc(k)}" loading="lazy"></div><figcaption>${esc(k.replaceAll('_',' '))}</figcaption></figure>`).join('');}
+function renderEngines(eng){const entries=Object.entries(eng||{});const available=entries.filter(([k,v])=>v.available).length;document.getElementById('engineState').textContent=available+'/'+entries.length;document.getElementById('engineCards').innerHTML=entries.map(([k,v])=>`<article class="engine-row"><div class="engine-top"><div><b>${esc(k)}</b>${badge(v.available)}</div><span>${v.available?(v.text?`${String(v.text).length} chars`:'no text'): 'configuration / dependency issue'}</span></div><pre>${esc((v.text||v.error||'').slice(0,7000))}</pre></article>`).join('');}
+function renderCombined(d){const v=d.vision||{}, local=d.local||{};lastEvidence=local.combined_text||'No local OCR text. CIS Vision evidence is shown separately.';document.getElementById('combinedText').textContent=lastEvidence;document.getElementById('combinedPanel').innerHTML=`<div class="evidence-state ${local.combined_text?'found':'vision-only'}"><span>${local.combined_text?'LOCAL OCR + VISION':'VISION-LED EVIDENCE'}</span><b>${local.combined_text?'Local text found and combined with visual evidence.':'Local OCR returned no text; CIS Vision evidence remains available for classification.'}</b></div><div class="evidence-stats"><div><small>OCR CHARACTERS</small><b>${(local.combined_text||'').length}</b></div><div><small>VISION CONFIDENCE</small><b>${v.confidence??'—'}</b></div><div><small>UNCERTAIN TEXT</small><b>${(v.uncertain_text||[]).length}</b></div></div>`;}
+form.onsubmit=async e=>{e.preventDefault(); if(!input.files[0])return;readBtn.disabled=true;readBtn.innerHTML='<span class="spinner"></span> READING PACKAGE…';errorBox.classList.add('hidden');result.classList.add('hidden');try{const fd=new FormData(form);const r=await fetch('/api/image-test',{method:'POST',body:fd});const d=await r.json();if(!d.ok)throw new Error(d.error||'Image test failed');result.classList.remove('hidden');document.getElementById('ocrState').textContent=d.local.combined_text?'TEXT FOUND':'NO LOCAL TEXT';document.getElementById('ocrSub').textContent=d.local.combined_text?`${d.local.combined_text.length} characters extracted`:'CIS Vision will still inspect the image';document.getElementById('visionState').textContent=d.vision?.ok?'READ':'UNAVAILABLE';document.getElementById('visionSub').textContent=d.vision?.ok?'Visual evidence captured':'Check CIS configuration';document.getElementById('timeState').textContent=(d.local.elapsed_ms||0)+' ms';document.getElementById('visionConfidence').textContent=d.vision?.confidence!==undefined?`Confidence ${d.vision.confidence}%`:'Confidence —';renderPreviews(d.previews);renderEngines(d.local.engines);renderCombined(d);document.getElementById('visionSummary').innerHTML=d.vision?.ok?visionCards(d.vision):'<div class="empty-state">CIS Vision did not return a package reading.</div>';document.getElementById('visionText').textContent=JSON.stringify(d.vision||{},null,2);result.scrollIntoView({behavior:'smooth',block:'start'});}catch(err){errorBox.textContent=err.message;errorBox.classList.remove('hidden');}finally{readBtn.disabled=false;readBtn.innerHTML='<span>✦</span> RUN IMAGE READ';}};
+document.getElementById('copyEvidence').onclick=async()=>{await navigator.clipboard.writeText(lastEvidence);document.getElementById('copyEvidence').textContent='Copied ✓';setTimeout(()=>document.getElementById('copyEvidence').textContent='Copy evidence',1400)};
+document.getElementById('newTest').onclick=()=>{form.reset();drop.classList.remove('selected');fileName.textContent='Choose an image to begin';title.textContent='Drop one product image';result.classList.add('hidden');window.scrollTo({top:0,behavior:'smooth'});};
+</script>
+</body></html>

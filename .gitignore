@@ -1,0 +1,8 @@
+.env
+runtime/uploads/*
+runtime/images/*
+runtime/outputs/*
+runtime/logs/*
+runtime/runs.json
+__pycache__/
+*.pyc
